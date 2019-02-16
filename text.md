@@ -61,5 +61,11 @@
           manifest: '里面填写 mainfest.json 的路径'，
       })
 
+### 2.利用happyPack进行多线程打包（项目大时考虑）
+
+### 3.懒加载
+      利用webpack的 es6（草案中） 的import（‘文件路径’）引入文件，引入的文件为一个promise
+      然后通过.then拿到相应的资源，vue和react都是利用这个原理进行路由懒加载的！
+
       
     
