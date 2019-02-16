@@ -1,5 +1,6 @@
 const path = require('path');
 let HtmlWebpackPlugin = require('html-webpack-plugin');
+let webpack = require('webpack');
 
 module.exports = {
     mode: 'development',
@@ -11,7 +12,8 @@ module.exports = {
     devServer: {
         proxy: {
             "/api": 'http://localhost:9100'
-        }
+        },
+        contentBase: path.join(__dirname, "dist")
     },
     module:{
         rules:[
@@ -21,10 +23,10 @@ module.exports = {
                     loader: 'babel-loader',
                     options:{
                         // 转化es6 =》es5语法
-                        presets:['@babel/preset-env'],
+                        presets:['@babel/preset-env','@babel/preset-react'],
                         plugins: [
                             ["@babel/plugin-proposal-class-properties", { "loose": true }],
-                            "@babel/plugin-transform-runtime"
+                            "@babel/plugin-transform-runtime",                
                         ]
                     },
                 },
@@ -42,6 +44,10 @@ module.exports = {
         ]
     },
     plugins:[
+        new webpack.DllReferencePlugin({
+            name:'_dll_react',
+            manifest: path.resolve(__dirname, 'dist',"manifest.json"),
+        }),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname,'index.html'),
         })

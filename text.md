@@ -47,3 +47,19 @@
         2. devtool:'eval-source-map'(不会产生一个多余文件，会定位行)
         。。。
         还有很多，但是我觉得用eval-source-map就可以了；
+
+# webpack的优化
+
+### 1.DLLPlugin 和 DLLReferencePlugin 拆分bundle.js，提升构建速度；
+      首先我们创建webpack.config.react.js产生两个文件
+      _dll_react.js（打包react和react-dom） 和 manifest.json(映射关系)；
+      这样我们打包的bundle.js文件就很小；
+      配置参考webpack.config.react.js
+      产生完成以后，需要在webpack.config.js中plugins里添加
+      new webpack.DllReferencePlugin({
+          name: '_dll_react',(导出的变量名)，
+          manifest: '里面填写 mainfest.json 的路径'，
+      })
+
+      
+    
