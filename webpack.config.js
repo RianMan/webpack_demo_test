@@ -25,6 +25,7 @@ module.exports = {
                         // 转化es6 =》es5语法
                         presets:['@babel/preset-env','@babel/preset-react'],
                         plugins: [
+                            // 特殊的语法需要插件去解析
                             ["@babel/plugin-proposal-class-properties", { "loose": true }],
                             "@babel/plugin-transform-runtime",                
                         ]
