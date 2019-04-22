@@ -1,56 +1,35 @@
 const path = require('path');
-let HtmlWebpackPlugin = require('html-webpack-plugin');
-let webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    mode: 'development',
     entry: './src/index.js',
-    output: {
-        filename:'index.js',
-        path: path.resolve(__dirname,'dist')
-    },
-    devServer: {
-        proxy: {
-            "/api": 'http://localhost:9100'
-        },
-        contentBase: path.join(__dirname, "dist")
+    output:{
+        path: path.join(__dirname,'dist'),
+        filename:'main.js'
     },
     module:{
         rules:[
             {
-                'test': /\.js$/,
-                'use':{
-                    loader: 'babel-loader',
-                    options:{
-                        // 转化es6 =》es5语法
-                        presets:['@babel/preset-env','@babel/preset-react'],
-                        plugins: [
-                            // 特殊的语法需要插件去解析
-                            ["@babel/plugin-proposal-class-properties", { "loose": true }],
-                            "@babel/plugin-transform-runtime",                
-                        ]
-                    },
-                },
-                exclude:/node_modules/
+                test: /.css$/,
+                use:['style-loader','css-loader']
             },
             {
-                'test': /\.css$/,
-                'use':['style-loader','css-loader']
+                test: /\.(png|jpg|gif)$/,
+                use: [
+                    {
+                      loader: 'file-loader',
+                      options: {
+                        outputPath: 'assets/'
+                      }
+                    }
+                  ]
             },
-            {
-                'test': /\.less$/,
-                // 规则先将less文件转为css，然后通过style-loader插入到html 中
-                'use':['style-loader','css-loader','less-loader']
-            }
         ]
     },
     plugins:[
-        new webpack.DllReferencePlugin({
-            name:'_dll_react',
-            manifest: path.resolve(__dirname, 'dist',"manifest.json"),
-        }),
         new HtmlWebpackPlugin({
-            template: path.resolve(__dirname,'index.html'),
+            template: './index.html',
+            title: 'hello webpack'
         })
     ]
 }

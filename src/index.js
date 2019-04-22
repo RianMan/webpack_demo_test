@@ -1,4 +1,8 @@
-import React from 'react';
-import { render } from 'react-dom';
+require('./index.css');
 
-render(<h1>hello world</h1>, window.app);
+document.getElementById('app').innerHTML = 'hello webpack';
+let imgSrc = require('./1.png');
+let img = new Image();
+img.src = imgSrc;
+document.body.appendChild(img);
+console.log('hello webpack ')
