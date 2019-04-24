@@ -63,3 +63,22 @@
             }
         ]
     ```
+
+7. 解析js文件
+    * 说实话babel真的很让人头疼，看网上的下载都不咋靠谱，因为他老是更新，我遇到一个问题，就是下载@babel/preset-stage-0，然后配置到presets中去，就一直报错，原来是移除了这个映射，坑了好久
+
+    * 现在babel7.0以上的版本,然后需要下载
+    ```
+        npm i @babel-core @babel-cli @babel-preset-env -D
+    ```
+    ```
+         {
+            test: /\.js$/,
+            use:{
+                loader: 'babel-loader',
+                options: {
+                    presets: ['@babel/preset-env']
+                }
+            }
+        },
+    ```
