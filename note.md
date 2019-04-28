@@ -1,6 +1,6 @@
-#从0配置一个webpack4.0环境
+# 从0配置一个webpack4.0环境
 ------
-##基础配置
+## 基础配置
 1. 首先通过npm下载webpack, webpack-cli, webpack-dev-server,这些包用来搭建初步的webpack环境
 
 2. 修改我们的package.json文件
@@ -85,10 +85,10 @@
         },
     ```
 -----
-##优化配置项
+## 优化配置项
 1.  有的时候利用react,vue这种框架开发的时候不能组件改变了，而整个页面都刷新了，所以就要用到（HRM）
     + 下载react-hot-loader
-    + 在配置文件和.babelrc里面加入一些plugin
+    + 在webpack.config.js和.babelrc里面加入一些plugin
     ```
         new webpack.NamedModulesPlugin(),
         new webpack.HotModuleReplacementPlugin(),
@@ -96,7 +96,7 @@
     ```
         "plugins": ["react-hot-loader/babel"],
     ```
-    + 在我们的入口组件里面（Main）中引入hot，然后到处hot(Main)
+    + 在我们的入口组件里面（Main）中引入hot，然后导出hot(Main)
     ```
         import React from 'react';
         import { hot } from 'react-hot-loader/root';
