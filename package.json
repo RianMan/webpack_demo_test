@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode development",
+    "build-dll":"webpack --config webpack.dll.config --mode production",
     "dev": "webpack-dev-server"
   },
   "keywords": [],
@@ -27,6 +28,7 @@
     "esprima": "^4.0.1",
     "estraverse": "^4.2.0",
     "file-loader": "^3.0.1",
+    "happypack": "^5.0.1",
     "html-webpack-plugin": "^3.2.0",
     "react-hot-loader": "^4.8.4",
     "style-loader": "^0.23.1",

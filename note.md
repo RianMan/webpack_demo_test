@@ -113,3 +113,70 @@
         export default hot(Main);
     ```
     + 然后去修改List和Button组件的时候页面不会刷新，而只是刷新单个的组件，这样体验就好了很多；
+
+2. 利用happypack进行多线程打包，提升构建速度，感觉小demo看不出来有什么优势
+    + npm i happypack -D ;
+    + 在webpack.config.js里面配置
+    ```
+         module: {
+             rules:[
+                {
+                    test: /\.js$/,
+                    use: 'happypack/loader?id=jsx',
+                },
+                {
+                    test: /.css$/,
+                    use:'happypack/loader?id=css'
+                },
+             ]
+         },
+         // id就对应上方id，threads表示所需分配的线程的个数，然后loaders还是我们之前所对应的loaders
+         plugins:[
+             new HappyPack({
+                id:'jsx',
+                threads: 1,
+                loaders: ['babel-loader']
+            }),
+            new HappyPack({
+                id:'css',
+                threads: 2,
+                loaders: ['style-loader','css-loader']
+            })
+         ]
+    ```
+
+3. 配置动态链接库，[DLLPlugin 和 DLLReferencePlugin](https://www.webpackjs.com/plugins/dll-plugin/) 实现了拆分 bundles，同时还大大提升了构建的速度
+    + 开发工程中很多第三方包很少更新所以我们一般不需要重新打包，例如react，react-dom这些，他们很大，所以很影响打包时间，所以我们可以把这些配置到动态链接库，如果更新我们重新配置就行了;
+
+    + 首先我们创建一个webpack.dll.config.js进行，穿件一个动态链接库出来(要先修改package.json文件的脚本命令执行这个配置文件)
+    ```
+        const webpack = require('webpack');
+        const path = require('path');
+        module.exports = {
+            entry: {
+                react: ['react','react-dom']
+            },
+            output:{
+                // 输出的动态链接库的文件名称，[name] 代表当前动态链接库的名称，
+                filename: '[name].dll.js',
+                path: path.join(__dirname,'dist/dll'),
+                // library必须和后面dllplugin中的name一致 后面会说明
+                library: '[name]_dll_[hash]'
+            },
+            plugins:[
+                new webpack.DllPlugin({
+                    name: '[name]_dll_[hash]',
+                    path: path.join(__dirname,'dist/dll','[name].manifest.json')
+                })
+            ]
+        }
+    ```
+
+    + 然后我们去修改我们的主配置文件，加一个插件webpack.DLLReferencePlugin;
+    所以我们一般先要生成一个动态链接库，在去打包我们的代码，这样我们的主文件代码就会小很多，而且构建速度大大加快啊
+    ```
+        new webpack.DllReferencePlugin({
+            context: __dirname,
+            manifest: require('./dist/dll/react.manifest.json')
+        }),
+    ```
