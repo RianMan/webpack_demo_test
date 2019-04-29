@@ -3,8 +3,7 @@ import React from 'react';
 
 function List(props){
     const { list = [] } = props;
-    const color = ['orange','red','skyblue']
-    console.log(list)
+    const color = PRODUCTION ? ['orange','red','skyblue'] : ['blue','red','green']
     return (
         <ul>    
             {list.map((v,index) => <li style={{color: color[index] }} key={v}>{v}</li>)}

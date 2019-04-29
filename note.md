@@ -84,6 +84,22 @@
             }
         },
     ```
+
+8. webpack的环境变量
+    * 要在开发和生产构建之间，消除 webpack.config.js 的差异，需要环境变量
+        > 举个例子，你有一个loader是消除里面console.log，但是我们开发的时候需要这些log日志，但是上线以后并不需要，所以这里我们就需要去判断环境然后去决定loader的使用与否
+    * 我们首先去package.json文件去重新修改我们的脚本
+        > webpack --env.NODE_ENV=local --mode production,但是这种方式我们需要将webpack的配置文件改成一个函数(env) => {...}，这样的形式才能拿到env变量的值
+    * 我们需要一个webpack插件去帮我们做这个工作webpack.DefinePlugin
+    ```
+        //_env就是我们首先定义的变量，判断是什么开发环境
+        new webpack.DefinePlugin({
+            PRODUCTION: _env === 'prd',
+            APIHOST: _env === 'prd' ? 'www.host.com' : 'wee.dev.com',
+        })
+        //然后我们在任何组件里面都可以拿到这里面定义的变量去做不同环境的逻辑判断
+    ```
+    
 -----
 ## 优化配置项
 1.  有的时候利用react,vue这种框架开发的时候不能组件改变了，而整个页面都刷新了，所以就要用到（HRM）
