@@ -48,6 +48,23 @@
             }
         ]
     ```
+    * 在项目中我们通常需要去配置css的模块化，那么就要加入配置项，为什么加入localIdentName，这是为了防止我们写的ccs类名重复，导致css效果覆盖，
+        > 另外我们还可以通过:global(.btn)或者:local(.btn)的方式去生成全局的样式和局部的样式，比如我设置全局的默认字体颜色为#666，
+    ```
+        {
+                    test: /.css$/,
+                    use:['style-loader',
+                        {   loader:'css-loader',
+                            options:{
+                                +++ modules: true,
+                                +++ localIdentName:'[name]_[local]_[hash:base64:4]'
+                            }
+                        }
+                    ]
+        },
+    ```
+    * 通常我们写react项目的时候都会带写styles.btn,但是这样写很麻烦，不能直接用className="btn",所以我们可以下载react-css-modules
+    
 
 6. 然后我们会去加载一些图片文件，那我们需要使用file-loader和url-loader去解析
     * 区别： url-loader可以设置一定的大小区间去判断如果在某个数值以内就直接使用base64  

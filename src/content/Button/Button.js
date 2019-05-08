@@ -1,13 +1,13 @@
 import React from 'react';
-import styles from './Button.less';
+import CSSModules from 'react-css-modules';
+import styles from './Button.css';
+
+console.log(styles)
 
 function Button(props){
-    console.log(props);
-    console.log(122);
     return (
     <button 
-        {...props} 
-        className={styles[props.type] || styles.primary } 
+        className={ props.type || 'primary' } 
     >
         {props.children}
     </button>

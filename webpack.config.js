@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HappyPack = require('happypack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MyPlugin = require('./plugin/my-plugin');
 module.exports = (env) => {
     let _env = env.NODE_ENV;
     //获取环境变量
@@ -35,7 +36,13 @@ module.exports = (env) => {
                 },
                 {
                     test: /.css$/,
-                    use:'happypack/loader?id=css'
+                    use:['style-loader',
+                        {   loader:'css-loader',
+                            options:{
+                                modules: true,
+                            }
+                        }
+                    ]
                 },
                 {
                     test: /.less$/,
@@ -76,11 +83,11 @@ module.exports = (env) => {
                 loaders: ['babel-loader','delete-log-loader']
             }), 
             */
-            new HappyPack({
-                id:'css',
-                threads: 2,
-                loaders: ['style-loader','css-loader']
-            }),
+            // new HappyPack({
+            //     id:'css',
+            //     threads: 2,
+            //     loaders: ['style-loader','css-loader']
+            // }),
             // 配置动态链接库
             new webpack.DllReferencePlugin({
                 context: __dirname,
@@ -90,7 +97,9 @@ module.exports = (env) => {
             new webpack.DefinePlugin({
                 PRODUCTION: _env === 'prd',
                 APIHOST: _env === 'prd' ? 'www.host.com' : 'wee.dev.com',
-            })
+            }),
+            // ------写一个自己插件
+            new MyPlugin()
         ]
     }
 }
